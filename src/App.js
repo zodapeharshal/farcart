@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-
+import logo from "./logo.svg";
+import "./App.css";
+import LoginComp from "./components/Login/LoginComp";
+import SignupPage from "./components/Login/SignupPage";
+import DashboardComp from "./components/Dashboard/DashboardComp";
+import { Route, Routes, Navigate } from "react-router-dom";
+import PdfViewer from "./components/PdfViewer/PdfViewer";
+import { useContext } from "react";
+import { useGetUser } from "./components/context/UserContext";
+import { UserContext } from "./components/context/UserContext";
+import Navigation from "./components/Navigation";
+import { useState } from "react";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [userData, setUserData] = useState({});
+    return (
+        <UserContext.Provider value={[userData, setUserData]}>
+            <Navigation />
+        </UserContext.Provider>
+    );
 }
 
 export default App;
