@@ -1,9 +1,11 @@
 const API_ENDPOINTS = {
     getUser: '/api/user',
-    signup: "https://pdf-manager-u6c8.onrender.com/pdf-manager/signup",
-    getAllPdf : "https://pdf-manager-u6c8.onrender.com/pdf-manager/files",
-    upload: "http://pdf-manager-u6c8.onrender.com/pdf-manager/upload",
-    deletePdf: ""
+    signup: "http://localhost:8080/api/signup",
+    login: "http://localhost:8080/api/login",
+    getAllPdf : "http://localhost:8080/api/uploadedFiles",
+    upload: "http://localhost:8080/api/upload",
+    deletePdf: "http://localhost:8080/api/file",
+    download: "http://localhost:8080/api/files/"
   };
   
   export default API_ENDPOINTS;

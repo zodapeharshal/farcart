@@ -6,18 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../context/UserContext";
+import API_ENDPOINTS from "../../assets/api";
 const LoginComp = () => {
     const navigate = useNavigate();
-    const [userData, setUserData] = useContext(UserContext) ;
+    const [userData, setUserData] = useContext(UserContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
             const payload = {
-                userName: "zodape_harshal",
                 email: email,
-                password: password,
+                password: password
             };
             console.log(JSON.stringify(payload)); // Do something with the response data
             const header = {
@@ -25,15 +25,16 @@ const LoginComp = () => {
                 "Access-Control-Allow-Origin": "*", // Allow requests from all origins
             };
             const response = await axios.post(
-                "https://pdf-manager-u6c8.onrender.com/pdf-manager/login",
+                API_ENDPOINTS.login,
                 payload,
                 { headers: header }
             );
-
+            
             if (response.status == 200) {
                 navigate("/dashboard");
-                setUserData(response.data) ;
                 console.log(response.data) ;
+                setUserData(response.data);
+                console.log(response.data);
             }
         } catch (error) {
             console.error(error);

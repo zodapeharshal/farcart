@@ -37,7 +37,7 @@ const PdfCard = ({onDelete, onDownload}) => {
                 <CardMedia
                     component="img"
                     height="140"
-                    image={require("E:/_Study_Folder_/Files/_DEV/farcart/frontend/src/assets/contemplative-reptile.jpg")}
+                    image={require("C:/Users/anshg/OneDrive/Documents/forntend/farcart/src/assets/contemplative-reptile.jpg")}
                     alt="green iguana"
                 />
                 <CardContent>

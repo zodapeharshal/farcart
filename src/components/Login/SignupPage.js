@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import API_ENDPOINTS from "../../assets/api";
+import { UserContext } from "../context/UserContext";
 const SignupPage = () => {
     const navigate = useNavigate();
     const [signUpClicked, setSignUpClicked] = useState(false);
@@ -11,6 +12,7 @@ const SignupPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [otp, setOTP] = useState();
+    const [userData, setUserData] = useContext(UserContext) ; 
 
     const requestOTP = async () => {
         try {
@@ -63,6 +65,8 @@ const SignupPage = () => {
             );
             if (response.status == 200) {
                 console.log("User Created Successfully");
+                // console.log(response.data) ;
+                setUserData(response.data) ;
                 navigate("/dashboard");
             }
         } catch (error) {
@@ -84,7 +88,9 @@ const SignupPage = () => {
         console.log("here");
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (emailRegex.test(email) && name.length > 0 && password.length > 0) {
+    
             createUser();
+
         }
     };
     return (

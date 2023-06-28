@@ -18,28 +18,23 @@ import RadioGroup from "@mui/material/RadioGroup";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 
-const UploadModal = () => {
+const UploadModal = ({onUpload}) => {
     const [open, setOpen] = useState(false);
     const [allUserData, setAllUserData] = useState([]);
     const [currentUser, setCurrentUser] = useContext(UserContext);
     const handleOpen = async () => {
-        const response = await axios.get(
-            "http://pdf-manager-u6c8.onrender.com/pdf-manager/users"
-        );
-        if (response.status == 200) {
-            setAllUserData(response.data);
-            setOpen(true);
-        } else {
-            toast.error("unable to upload file");
-        }
+
+        setOpen(true);
+
     };
 
     const handleClose = () => setOpen(false);
     const [file, setFile] = useState();
     const handleFileUpload = async () => {
+        console.log(currentUser)
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("senderId", 1);
+        formData.append("senderId", currentUser.id);
         await axios
             .post(API_ENDPOINTS.upload, formData, {
                 headers: {
@@ -50,6 +45,7 @@ const UploadModal = () => {
                 // handle the response
                 if (response.status == 200) {
                     handleClose();
+                    onUpload(); 
                     toast("File Uploaded Successfully");
                 }
             })
@@ -125,9 +121,13 @@ const UploadModal = () => {
 const DashboardComp = () => {
     const [showUserModal, setShowUserModal] = useState(false);
     const [allpdf, setAllPDf] = useState([]);
+    const [currentUser, setCurrentUser] = useContext(UserContext);
+
     const getAllPdfs = async () => {
         try {
-            const response = await axios.get(API_ENDPOINTS.getAllPdf);
+            console.log(currentUser) ;
+            console.log("Requested URl : ", API_ENDPOINTS.getAllPdf + `?userId=${currentUser.id}`)
+            const response = await axios.get(API_ENDPOINTS.getAllPdf + `?userId=${currentUser.id}`);
             if (response.status == 200) {
                 setAllPDf(response.data);
             } else {
@@ -140,12 +140,14 @@ const DashboardComp = () => {
     useEffect(() => {
         getAllPdfs();
     }, []);
-    const handleDeleteCallback = () => {
-        const response = axios
-            .delete(API_ENDPOINTS.deletePdf)
+    const handleDeleteCallback = (fileId, userId) => {
+        console.log(API_ENDPOINTS.deletePdf + `?fileId=${fileId}` + `&userId=${userId}`) ;
+        axios
+            .delete(API_ENDPOINTS.deletePdf + `?fileId=${fileId}` + `&userId=${userId}`)
             .then((response) => {
                 if (response.status == 200) {
                     toast("Deleted Successfully");
+                    getAllPdfs() ; 
                 }
             })
             .catch((error) => {
@@ -154,18 +156,36 @@ const DashboardComp = () => {
                 console.error("Error deleting PDF:", error);
             });
     };
-    const handleDownloadCallback = () => {
-        const response = axios
-            .post(API_ENDPOINTS.download)
-            .then((response) => {
-                if (response.status != 200) {
-                    toast("Unable to download");
-                }
+    const handleDownloadCallback = (fileId) => {
+        // axios
+        //     .get(API_ENDPOINTS.download + `${fileId}`)
+        //     .then((response) => {
+        //         if (response.status != 200) {
+        //             toast("Unable to download");
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         // Handle errors
+        //         toast("Unable to download");
+        //         console.error("Error download PDF:", error);
+        //     });
+        axios({
+            url: API_ENDPOINTS.download + `${fileId}`,
+            method: 'GET',
+            responseType: 'blob' // Set the response type to 'blob' to handle binary data
+          })
+            .then(response => {
+              // Create a download link and trigger the download
+              const downloadUrl = URL.createObjectURL(response.data);
+              const a = document.createElement('a');
+              a.href = downloadUrl;
+              a.download = `filename1.pdf`; // Set the desired file name and extension
+              a.click();
+              URL.revokeObjectURL(downloadUrl);
             })
-            .catch((error) => {
-                // Handle errors
-                toast("Unable to download");
-                console.error("Error download PDF:", error);
+            .catch(error => {
+              console.error('Error downloading file:', error);
+              toast("Unable to download ;")
             });
     };
     return (
@@ -176,7 +196,7 @@ const DashboardComp = () => {
                 <div className="w-10/12 pl-6 pt-0.5 p-4">
                     <div className="flex justify-between">
                         <h1 className="text-4xl">MY PDF</h1>
-                        <UploadModal />
+                        <UploadModal onUpload={getAllPdfs}/>
                     </div>
                     <div
                         style={{
@@ -190,8 +210,8 @@ const DashboardComp = () => {
                                 allpdf.map((item) => {
                                     return (
                                         <PdfCard
-                                            onDelete={handleDeleteCallback}
-                                            onDownload={handleDownloadCallback}
+                                            onDelete={()=>handleDeleteCallback(item.fileId, currentUser.id)}
+                                            onDownload={()=> handleDownloadCallback(item.fileId)}
                                         >
                                             PDF depends on response
                                         </PdfCard>

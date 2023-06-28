@@ -14,12 +14,12 @@ const Navigation = () => {
         <Route
             path="/dashboard"
             element={
-                // userData && userData["id"] ? (
-                //     <DashboardComp />
-                // ) : (
-                //     <Navigate replace to={"/"} />
-                // )
-                <DashboardComp/>
+                userData && userData["id"] ? (
+                    <DashboardComp />
+                ) : (
+                    <Navigate replace to={"/"} />
+                )
+                // <DashboardComp/>
             }
         />
         <Route path="/pdfviewer" element={<PdfViewer />} />
