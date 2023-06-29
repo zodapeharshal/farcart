@@ -4,7 +4,7 @@ import CardMedia from "@mui/material/CardMedia";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import PrimarySearchAppBar from "./Header";
-
+import PdfIcon from "../../assets/download.png"
 import Box from "@mui/material/Box";
 
 import Modal from "@mui/material/Modal";
@@ -29,7 +29,7 @@ const style = {
 
  
 
-const PdfCard = ({onDelete, onDownload}) => {
+const PdfCard = ({onDelete, onDownload, pdfName}) => {
     return (
         <Card sx={{ maxWidth: 345 }}>
          
@@ -37,12 +37,12 @@ const PdfCard = ({onDelete, onDownload}) => {
                 <CardMedia
                     component="img"
                     height="140"
-                    image={require("C:/Users/anshg/OneDrive/Documents/forntend/farcart/src/assets/contemplative-reptile.jpg")}
+                    image={require(PdfIcon)}
                     alt="green iguana"
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        Lizard
+                        pdfName
                     </Typography>
 
                 </CardContent>

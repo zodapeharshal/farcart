@@ -17,22 +17,20 @@ const LoginComp = () => {
         try {
             const payload = {
                 email: email,
-                password: password
+                password: password,
             };
             console.log(JSON.stringify(payload)); // Do something with the response data
             const header = {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*", // Allow requests from all origins
             };
-            const response = await axios.post(
-                API_ENDPOINTS.login,
-                payload,
-                { headers: header }
-            );
-            
+            const response = await axios.post(API_ENDPOINTS.login, payload, {
+                headers: header,
+            });
+
             if (response.status == 200) {
                 navigate("/dashboard");
-                console.log(response.data) ;
+                console.log(response.data);
                 setUserData(response.data);
                 console.log(response.data);
             }
@@ -106,33 +104,7 @@ const LoginComp = () => {
                                     required
                                 />
                             </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-start">
-                                    <div className="flex items-center h-5">
-                                        <input
-                                            id="remember"
-                                            aria-describedby="remember"
-                                            type="checkbox"
-                                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="ml-3 text-sm">
-                                        <label
-                                            htmlFor="remember"
-                                            className="text-gray-500"
-                                        >
-                                            Remember me
-                                        </label>
-                                    </div>
-                                </div>
-                                <a
-                                    href="#"
-                                    className="text-sm font-medium text-primary-600 hover:underline"
-                                >
-                                    Forgot password?
-                                </a>
-                            </div>
+
                             <button
                                 type="submit"
                                 className="w-full text-black bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
